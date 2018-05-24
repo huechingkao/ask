@@ -1,13 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}   
-    <a href="/">回首頁</a><BR>
-    <h1>問題</h1>    
-    {{ question.subject }}<BR>
-    <h1>答案</h1>
-    <a href="/question/a/create/{{question.id}}">新增答案</a><BR>      
-    {% for answer in question.answer_set.all %}
-    <a href="/question/a/{{question.id}}/{{answer.id}}/update">修改</a> <a href="/question/a/{{question.id}}/{{answer.id}}/delete">刪除</a>
-   {{answer.content}}<BR>
-    {% endfor %}
+<a href="/" class="btn btn-outline-primary">回首頁</a><BR>
+<h1>問題</h1>    
+<div class="list-group-item">{{ question.subject }}</div>
+<h1>答案</h1>
+<a href="a/create/" class="btn btn-sm btn-primary">新增答案</a><BR>
+<ul class="list-group">
+{% for answer in question.answer_set.all %}
+  <li class="list-group-item">
+    <a href="a/{{answer.id}}/update" class="btn btn-sm btn-secondary">修改</a>
+    <a href="a/{{answer.id}}/delete" class="btn btn-sm btn-danger">刪除</a>
+    {{answer.content}}
+  </li>
+{% endfor %}
+</ul>
 {% endblock %}

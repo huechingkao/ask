@@ -13,13 +13,25 @@ class QuestionCreate(CreateView):
     model = Question
     fields = ['subject']
     success_url = "/"   
-    template_name = 'form.html'       
+    template_name = 'form.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = '新增問題'
+        context['backpath'] = "/"
+        return context
 
 class QuestionUpdate(UpdateView):
     model = Question
     fields = '__all__'   
     success_url = "/"   
     template_name = 'form.html'   
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = '修改問題'
+        context['backpath'] = "/"
+        return context
 
 class QuestionDelete(DeleteView):
     model = Question
@@ -35,10 +47,22 @@ class AnswerCreate(CreateView):
         form.instance.question = Question.objects.get(id=self.kwargs['q'])
         return super(AnswerCreate, self).form_valid(form)    
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = '新增答案'
+        context['backpath'] = "/question/q/"+str(self.kwargs['q'])
+        return context
+      
 class AnswerUpdate(UpdateView):
     model = Answer
-    fields = '__all__'   
+    fields = ['content']
     template_name = 'form.html'   
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = '修改答案'
+        context['backpath'] = "/question/q/"+str(self.kwargs['q'])
+        return context
 
 class AnswerDelete(DeleteView):
     model = Answer
@@ -46,3 +70,9 @@ class AnswerDelete(DeleteView):
     
     def get_success_url(self):
         return reverse('question_detail', kwargs={'pk': self.kwargs['q']})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['backpath'] = "/question/q/"+str(self.kwargs['q'])
+        return context
+    
